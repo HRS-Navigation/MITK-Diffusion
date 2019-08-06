@@ -1,4 +1,4 @@
-MITK_CREATE_MODULE(
+mitk_create_module(
   SUBPROJECTS MITK-Diffusion
   INCLUDE_DIRS Algorithms Algorithms/BrainParcellation IODataStructures Rendering ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS MitkDiffusionCore

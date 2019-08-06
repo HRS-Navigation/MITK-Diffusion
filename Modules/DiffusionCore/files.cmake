@@ -158,6 +158,5 @@ set(H_FILES
   Algorithms/itkRegularizedIVIMReconstructionSingleIteration.h
 )
 
-set( TOOL_FILES
+set(TOOL_FILES
 )
-

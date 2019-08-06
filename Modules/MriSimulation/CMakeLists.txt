@@ -1,6 +1,4 @@
-
-
-MITK_CREATE_MODULE(
+mitk_create_module(
   SUBPROJECTS MITK-Diffusion
   INCLUDE_DIRS SignalModels Sequences Algorithms ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS MitkFiberTracking

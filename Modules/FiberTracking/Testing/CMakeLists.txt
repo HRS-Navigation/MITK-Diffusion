@@ -1,4 +1,4 @@
-MITK_CREATE_MODULE_TESTS()
+mitk_create_module_tests()
 
 if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 mitkAddCustomModuleTest(mitkFiberBundleReaderWriterTest mitkFiberBundleReaderWriterTest)

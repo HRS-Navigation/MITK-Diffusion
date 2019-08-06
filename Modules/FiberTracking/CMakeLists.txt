@@ -35,7 +35,7 @@ if(NOT _missing_deps)
 
 endif()
 
-MITK_CREATE_MODULE(
+mitk_create_module(
   SUBPROJECTS MITK-Diffusion
   INCLUDE_DIRS Algorithms Algorithms/TrackingHandlers Algorithms/ClusteringMetrics Algorithms/GibbsTracking Algorithms/StochasticTracking ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS ${_module_deps}
