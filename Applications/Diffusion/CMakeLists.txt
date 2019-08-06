@@ -62,12 +62,10 @@ set(_plugins
   org.mitk.gui.qt.renderwindowmanager
 )
 
-if(NOT MITK_USE_Python)
+if(NOT MITK_USE_Python3)
   list(REMOVE_ITEM _plugins org.mitk.gui.qt.diffusionimaging.python)
   list(REMOVE_ITEM _plugins org.mitk.gui.qt.python)
 endif()
-
-
 
 # Plug-ins listed below will not be
 #  - added as a build-time dependency to the executable
@@ -107,4 +105,3 @@ endif()
 if(MITK_MODULES_ENABLED_PLUGINS)
   add_dependencies(${DIFFUSIONAPP_NAME} ${MITK_MODULES_ENABLED_PLUGINS})
 endif()
-

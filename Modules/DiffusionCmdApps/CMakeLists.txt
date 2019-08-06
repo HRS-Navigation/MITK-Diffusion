@@ -1,4 +1,4 @@
-MITK_CREATE_MODULE(
+mitk_create_module(
   SUBPROJECTS MITK-Diffusion
   # INCLUDE_DIRS Helpers
   DEPENDS MitkDiffusionCore MitkDiffusionIO MitkCommandLine
@@ -14,7 +14,7 @@ if(MODULE_IS_ENABLED)
   add_subdirectory(Misc)
   add_subdirectory(Quantification)
 
-if(MITK_USE_Python)
+if(MITK_USE_Python3)
   add_subdirectory(Python)
 endif()
 endif()
