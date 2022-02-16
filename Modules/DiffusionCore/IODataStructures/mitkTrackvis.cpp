@@ -172,25 +172,39 @@ short TrackVisFiberReader::read( mitk::FiberBundle* fib, bool use_matrix, bool p
   if (print_header)
     this->print_header();
 
-  while (fread((char*)&numPoints, 1, 4, m_FilePointer)==4)
+  while (fread((char*)&numPoints, 1, 4, m_FilePointer) == 4)
   {
-    if ( numPoints <= 0 )
-    {
-      printf( "[ERROR] Trying to read a fiber with %d points!\n", numPoints );
-      return -1;
-    }
-    vtkSmartPointer<vtkPolyLine> container = vtkSmartPointer<vtkPolyLine>::New();
+	  if (numPoints <= 0)
+	  {
+		  printf("[ERROR] Trying to read a fiber with %d points!\n", numPoints);
+		  return -1;
+	  }
+	  vtkSmartPointer<vtkPolyLine> container = vtkSmartPointer<vtkPolyLine>::New();
 
-    float tmp[3];
-    for(int i=0; i<numPoints; i++)
-    {
-      if (fread((char*)tmp, 1, 12, m_FilePointer) == 0)
-        MITK_ERROR << "TrackVis::read: Error during read.";
+	  // HRS_NAVIGATION_MODIFICATION starts
+	  // float tmp[3];
+	  float* tmp = new float[3 + m_Header.n_scalars];
+	  for (int i = 0; i < numPoints; i++)
+	  {
+		  // if (fread((char*)tmp, 1, 12, m_FilePointer) == 0)
+		  if (fread((char*)tmp, 1, (3 + m_Header.n_scalars) * sizeof(float), m_FilePointer) == 0)
+			  MITK_ERROR << "TrackVis::read: Error during read.";
 
-      vtkIdType id = vtkNewPoints->InsertNextPoint(tmp);
-      container->GetPointIds()->InsertNextId(id);
-    }
-    vtkNewCells->InsertNextCell(container);
+		  vtkIdType id = vtkNewPoints->InsertNextPoint(tmp);
+		  container->GetPointIds()->InsertNextId(id);
+	  }
+	  vtkNewCells->InsertNextCell(container);
+
+	  delete[] tmp;
+
+	  if (m_Header.n_properties)
+	  {
+		  float* tmpProperties = new float[m_Header.n_properties];
+		  if (fread((char*)tmpProperties, 1, m_Header.n_properties * sizeof(float), m_FilePointer) == 0)
+			  MITK_ERROR << "TrackVis::read: Error during read.";
+		  delete[] tmpProperties;
+	  }
+	  // HRS_NAVIGATION_MODIFICATION ends
   }
 
   vtkSmartPointer<vtkPolyData> fiberPolyData = vtkSmartPointer<vtkPolyData>::New();
