@@ -104,6 +104,10 @@ public:
 mitk::FiberBundleMapper2D::FiberBundleMapper2D()
   : m_LineWidth(1)
 {
+   // HRS_NAVIGATION_MODIFICATION starts
+    m_fOpacity = 1.;
+// HRS_NAVIGATION_MODIFICATION ends
+
   m_lut = vtkSmartPointer<vtkLookupTable>::New();
   m_lut->Build();
 
@@ -156,6 +160,19 @@ void mitk::FiberBundleMapper2D::Update(mitk::BaseRenderer * renderer)
     m_LineWidth = lineWidth;
     fiberBundle->RequestUpdate2D();
   }
+
+  // HRS_NAVIGATION_MODIFICATION starts
+  {
+    float fiberOpacity;
+    node->GetOpacity(fiberOpacity, renderer);
+    if (fabs(fiberOpacity - m_fOpacity) > 0.01)
+    {
+        m_fOpacity = fiberOpacity;
+        fiberBundle->RequestUpdate2D();
+    }
+  }
+// HRS_NAVIGATION_MODIFICATION ends
+
 
   vtkProperty *property = localStorage->m_Actor->GetProperty();
   property->SetLighting(false);
@@ -303,6 +320,14 @@ void mitk::FiberBundleMapper2D::GenerateDataForRenderer(mitk::BaseRenderer *rend
 
   localStorage->m_Actor->SetMapper(localStorage->m_Mapper);
   localStorage->m_Actor->GetProperty()->SetLineWidth(m_LineWidth);
+
+  // HRS_NAVIGATION_MODIFICATION starts
+  {
+      float fiberOpacity;
+      node->GetOpacity(fiberOpacity, renderer);
+      localStorage->m_Actor->GetProperty()->SetOpacity(fiberOpacity);
+  }
+  // HRS_NAVIGATION_MODIFICATION ends
 
   // We have been modified => save this for next Update()
   localStorage->m_LastUpdateTime.Modified();

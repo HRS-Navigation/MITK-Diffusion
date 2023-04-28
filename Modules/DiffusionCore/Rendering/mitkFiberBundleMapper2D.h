@@ -79,6 +79,10 @@ private:
   vtkSmartPointer<vtkLookupTable> m_lut;
 
   int     m_LineWidth;
+  // HRS_NAVIGATION_MODIFICATION starts
+  float m_fOpacity;     // as we need to check for opacity chnages also.
+  // HRS_NAVIGATION_MODIFICATION ends
+
 };
 
 
