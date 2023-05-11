@@ -28,6 +28,26 @@ See LICENSE.txt or http://www.mitk.org for details.
 #include "mitkStringProperty.h"
 #include <mitkImageCast.h>
 
+
+
+// HRS_NAVIGATION_MODIFICATION starts
+size_t __gfnFindCaseInsensitive(std::string data, std::string toSearch, size_t pos = 0)
+{
+    // Convert complete given String to lower case
+    std::transform(data.begin(), data.end(), data.begin(), ::tolower);
+    // Convert complete given Sub String to lower case
+    std::transform(toSearch.begin(), toSearch.end(), toSearch.begin(), ::tolower);
+    // Find sub string in given string
+    return data.find(toSearch, pos);
+}
+// HRS_NAVIGATION_MODIFICATION ends
+
+
+
+
+
+
+
 static void PerformHeaderAnalysis( mitk::DiffusionHeaderDICOMFileReader::DICOMHeaderListType headers )
 {
   unsigned int images = headers.size();
@@ -315,7 +335,10 @@ void mitk::DiffusionDICOMFileReader
       MITK_INFO("diffusion.dicomreader") << "Output " << outputidx+1 << "  Got vendor: " << vendor << " image type " << image_type;
 
       // parse vendor tag
-      if(    vendor.find("SIEMENS") != std::string::npos || vendor.find("Siemens HealthCare GmbH") != std::string::npos )
+      // HRS_NAVIGATION_MODIFICATION starts
+      //if(    vendor.find("SIEMENS") != std::string::npos || vendor.find("Siemens HealthCare GmbH") != std::string::npos )
+      if (__gfnFindCaseInsensitive(vendor,"SIEMENS") != std::string::npos || __gfnFindCaseInsensitive(vendor,"Siemens HealthCare GmbH") || __gfnFindCaseInsensitive(vendor,"Siemens Healthineers") != std::string::npos)
+      // HRS_NAVIGATION_MODIFICATION ends
       {
         if( image_type.find("MOSAIC") != std::string::npos )
         {
@@ -328,11 +351,17 @@ void mitk::DiffusionDICOMFileReader
         }
 
       }
-      else if( vendor.find("GE") != std::string::npos )
+      // HRS_NAVIGATION_MODIFICATION starts
+      //else if (vendor.find("GE") != std::string::npos)
+      else if (__gfnFindCaseInsensitive(vendor,"GE") != std::string::npos)
+      // HRS_NAVIGATION_MODIFICATION ends
       {
         headerReader = mitk::DiffusionHeaderGEDICOMFileReader::New();
       }
-      else if( vendor.find("Philips") != std::string::npos )
+      // HRS_NAVIGATION_MODIFICATION starts
+      //else if( vendor.find("Philips") != std::string::npos )
+      else if (__gfnFindCaseInsensitive(vendor,"Philips") != std::string::npos)
+      // HRS_NAVIGATION_MODIFICATION ends
       {
         headerReader = mitk::DiffusionHeaderPhilipsDICOMFileReader::New();
       }

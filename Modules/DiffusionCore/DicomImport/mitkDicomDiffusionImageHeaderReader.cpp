@@ -23,6 +23,13 @@ See LICENSE.txt or http://www.mitk.org for details.
 #include "mitkSiemensDicomDiffusionImageHeaderReader.h"
 #include "mitkSiemensMosaicDicomDiffusionImageHeaderReader.h"
 
+
+
+// HRS_NAVIGATION_MODIFICATION starts
+extern size_t __gfnFindCaseInsensitive(std::string data, std::string toSearch, size_t pos = 0);
+// HRS_NAVIGATION_MODIFICATION ends
+
+
 void InsertUnique( std::vector<float> & vec, float value )
 {
   int n = vec.size();
@@ -92,12 +99,18 @@ mitk::DicomDiffusionImageHeaderReader::GetVendorID()
   itk::ExposeMetaData<std::string> ( *(*inputDict)[0], "0008|0008", ImageType );
   //std::cout << ImageType << std::endl;
 
-  if ( vendor.find("GE") != std::string::npos )
+  // HRS_NAVIGATION_MODIFICATION starts
+  //if (vendor.find_AmitTempCode("GE") != std::string::npos)
+  if (__gfnFindCaseInsensitive(vendor, "GE") != std::string::npos)
+  // HRS_NAVIGATION_MODIFICATION ends
   {
     // for GE data
     return SV_GE;
   }
-  else if( vendor.find("SIEMENS") != std::string::npos )
+  // HRS_NAVIGATION_MODIFICATION starts
+  //else if( vendor.find_AmitTempCode("SIEMENS") != std::string::npos )
+  else if (__gfnFindCaseInsensitive(vendor, "SIEMENS") != std::string::npos)
+  // HRS_NAVIGATION_MODIFICATION ends
   {
     if ( ImageType.find("MOSAIC") != std::string::npos )
     {
@@ -110,7 +123,10 @@ mitk::DicomDiffusionImageHeaderReader::GetVendorID()
       return SV_SIEMENS;
     }
   }
-  else if( vendor.find("PHILIPS") != std::string::npos )
+  // HRS_NAVIGATION_MODIFICATION starts
+  //else if( vendor.find_AmitTempCode("PHILIPS") != std::string::npos )
+  else if (__gfnFindCaseInsensitive(vendor, "PHILIPS") != std::string::npos)
+  // HRS_NAVIGATION_MODIFICATION ends
   {
     // for philips data
     return SV_PHILIPS;
